@@ -20,6 +20,20 @@ namespace Book.CRUD.Service
             return book;
         }
 
+        public Books InsertBook(Books book)
+        {
+            var books = this.storeageBroker.AddBook(book);
+            if (book is null)
+            {
+                this.loggingBroker.LogError("Invalid information.");
+            }
+            else
+            {
+                this.loggingBroker.LogInformation("Added new information.");
+            }
+            return books;
+        }
+
         public Books[] ReadAllBook()
         {
             var bookInfo = this.storeageBroker.GetAllBook();
