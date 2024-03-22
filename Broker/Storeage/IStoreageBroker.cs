@@ -5,6 +5,7 @@ namespace Book.CRUD.Broker.Storeage
     interface IStoreageBroker
     {
         Books ReadBook(int id);
-        //ReadAllBook()
+        Books[] GetAllBook();
+
     }
 }
