@@ -2,6 +2,7 @@
 using Book.CRUD.Broker.Storeage;
 using Book.CRUD.Models;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Book.CRUD.Service
 {
@@ -22,16 +23,9 @@ namespace Book.CRUD.Service
 
         public Books InsertBook(Books book)
         {
-            var books = this.storeageBroker.AddBook(book);
-            if (book is null)
-            {
-                this.loggingBroker.LogError("Invalid information.");
-            }
-            else
-            {
-                this.loggingBroker.LogInformation("Added new information.");
-            }
-            return books;
+            return book is null
+                    ? InsertBookIsInvalid()
+                    : ValidationAndInsertBook(book);
         }
 
         public Books[] ReadAllBook()
@@ -59,6 +53,37 @@ namespace Book.CRUD.Service
         public bool Update(int id, Books book)
         {
             return this.storeageBroker.Update(id, book);
+        }
+
+        private Books ValidationAndInsertBook(Books book)
+        {
+            if (book.Id is 0
+                || String.IsNullOrWhiteSpace(book.Name)
+                || String.IsNullOrWhiteSpace(book.Author))
+            {
+                this.loggingBroker.LogError("Invalid books inforamtion.");
+                return new Books();
+            }
+            else
+            {
+                var bookInfo = this.storeageBroker.AddBook(book);
+
+                if (bookInfo is null)
+                {
+                    this.loggingBroker.LogInformation("Not Added book Info.");
+                }
+                else
+                {
+                    this.loggingBroker.LogInformation("Secssesfull.");
+                }
+                return bookInfo;
+            }
+        }
+
+        private Books InsertBookIsInvalid()
+        {
+            this.loggingBroker.LogError("Book info is null.");
+            return new Books();
         }
     }
 }

@@ -19,7 +19,15 @@ do
     string command = Console.ReadLine();
     if (command.Contains("2") is true)
     {
-        bookService.InsertBook(new Books() { Id = 3, Name = "Shaytanat", Author = "Toxir Malik" });
+        Books bookInfo = new Books();
+        Console.Write("Enter book id: ");
+        bookInfo.Id = Convert.ToInt32(Console.ReadLine());
+        Console.Write("Enter book name: ");
+        bookInfo.Name = Console.ReadLine();
+        Console.Write("Enter book author: ");
+        bookInfo.Author = Console.ReadLine();
+
+        bookService.InsertBook(bookInfo);
     }
     if (command.Contains("1") is true)
     {
